@@ -1,5 +1,13 @@
-var React = require('react');
+var React    = require('react');
 var ReactDOM = require('react-dom');
+
+var ReactRouter = require('react-router');
+var Router      = ReactRouter.Router;
+var Route       = ReactRouter.Router;
+var Navigation  = ReactRouter.Navigation;
+
+var createBrowserHistory = require('history/lib/createbrowserHistory');
+const history = createBrowserHistory();
 
 /**
  * App
@@ -85,4 +93,25 @@ var StorePicker = React.createClass({
   }
 });
 
-ReactDOM.render(<App/>, document.querySelector('#main'));
+/**
+ * Not Found
+ */
+var NotFound = React.createClass({
+  render: function() {
+    return <h1>Not Found!</h1>
+  }
+});
+
+/**
+ * Routes
+ */
+
+var routes = (
+  <Router history={history}>
+    <Route path="/" component={StorePicker}/>
+    <Route path="/store/:storeId" component={App}/>
+    <Route path="*" component={NotFound}/>
+  </Router>
+);
+
+ReactDOM.render(routes, document.querySelector('#main'));
