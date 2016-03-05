@@ -171,6 +171,9 @@ var StorePicker = React.createClass({
     event.preventDefault();
 
     // get the data from the input
+    var storeId = this.refs.storeId.value;
+
+    console.log(storeId);
     
     // transition from <Storepicket/> to <Inventory/>
     console.log(this.refs);
