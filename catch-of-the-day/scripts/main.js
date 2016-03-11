@@ -206,6 +206,13 @@ var Order = React.createClass({
       </li>
     );
   },
+  shouldComponentUpdate: function(nextProps, nextState) {
+    if (Object.keys(nextProps.fishes).length) {
+      console.log('Fresh fish!');
+      return true;
+    }
+    return false;
+  },
   render: function() {
     var orderIds = Object.keys(this.props.order);
 
