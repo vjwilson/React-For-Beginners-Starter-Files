@@ -176,6 +176,9 @@ var Header = React.createClass({
         <h3 className="tagline"><span>{this.props.tagline}</span></h3>
       </header>
     );
+  },
+  propTypes: {
+    tagline: React.PropTypes.string.isRequired
   }
 });
 
@@ -184,6 +187,11 @@ var Header = React.createClass({
  */
 
 var Order = React.createClass({
+  propTypes: {
+      fishes: React.PropTypes.object.isRequired,
+      order: React.PropTypes.object.isRequired,
+      removeFromOrder: React.PropTypes.func.isRequired
+  },
   renderOrder: function(key) {
     var fish = this.props.fishes[key];
     var count = this.props.order[key];
@@ -257,6 +265,13 @@ var Order = React.createClass({
  */
 
 var Inventory = React.createClass({
+  propTypes: {
+    addFish: React.PropTypes.func.isRequired,
+    loadSamples: React.PropTypes.func.isRequired,
+    fishes: React.PropTypes.object.isRequired,
+    linkState: React.PropTypes.func.isRequired,
+    removeFish: React.PropTypes.func.isRequired 
+  },
   renderInventory: function(key) {
     var linkState = this.props.linkState;
     return (
