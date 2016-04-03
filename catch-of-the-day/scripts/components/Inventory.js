@@ -21,8 +21,52 @@ class Inventory extends React.Component {
 
   authenticate(provider) {
     console.log('Trying to auth with ' + provider);
-    ref.authWithOAuthPopup(provider, function(err, authData) {
-      console.log(authData);
+    ref.authWithOAuthPopup(provider, this.authHandler);
+  }
+
+  componentWillMount() {
+    console.log('checking to see if we can log them in');
+    var token = localStorage.getItem('token');
+    if (token) {
+      ref.authWithCustomToken(token, this.authHandler);
+    }
+  }
+
+  logout() {
+    ref.unauth();
+    localStorage.removeItem('token');
+    this.setState({
+      uid: null
+    });
+  }
+
+  authHandler(err, authData) {
+    console.log('in the auth handler...: ', authData);
+    if (err) {
+      console.err(err);
+      return;
+    }
+
+    // save the login token in the browser
+    localStorage.setItem('token', authData.token);
+
+    console.log(this.props.params.storeId);
+    const storeRef = ref.child(this.props.params.storeId);
+    storeRef.on('value', (snapshot) => {
+      var data = snapshot.val() || {};
+
+      // claim it as our own if no owner alreay
+      if (!data.owner) {
+        storeRef.set({
+          owner: authData.uid
+        });
+      }
+
+      // update our state to reflect the current store owner and user
+      this.setState({
+        uid: authData.uid,
+        owner: data.owner || authData.uid
+      });
     });
   }
 
@@ -57,7 +101,7 @@ class Inventory extends React.Component {
   }
 
   render() {
-    let logoutButton = <button>Log Out!</button>
+    let logoutButton = <button onClick={this.logout}>Log Out!</button>
 
     // first check if they are logged in
     if (!this.state.uid) {
